@@ -49,6 +49,9 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
     take_any_clause = first_unsat_clause(clauses, assignment)
     global depth
     depth = depth + 1
+
+
+    
     if not take_any_clause:
         return assignment
     # else check if no possible solution
@@ -65,11 +68,11 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
     can_do = what_branch(take_any_clause, assignment)
     # print "----", can_do, "a", assignment
     if (can_do[0]):
-        print " " * depth, "b1", take_any_clause, assignment[u], assignment[v], assignment[w]
+        print " " * depth, "b1", take_any_clause, assignment[u], assignment[v], assignment[w], "SET", u
         ##
-        if take_any_clause[0] > 1:
+        if take_any_clause[0] > 0:
             assignment[u] = 1 # could simplify as a[u]=int(c[0]>1)
-        elif take_any_clause[0] < 1:
+        elif take_any_clause[0] < 0:
             assignment[u] = 0
         ##
         result = recursive_solve_3SAT(num_variables, clauses, assignment)
@@ -81,15 +84,15 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
     else:
         print " " * depth, "b1 NO", take_any_clause, assignment[u], assignment[v], assignment[w]
     if (can_do[1]):
-        print " " * depth, "b2"
+        print " " * depth, "b2", "SET", u, v
         ##
-        if take_any_clause[0] > 1:
+        if take_any_clause[0] > 0:
             assignment[u] = 0
-        elif take_any_clause[0] < 1:
+        elif take_any_clause[0] < 0:
             assignment[u] = 1
-        if take_any_clause[1] > 1:
+        if take_any_clause[1] > 0:
             assignment[v] = 1
-        elif take_any_clause[1] < 1:
+        elif take_any_clause[1] < 0:
             assignment[v] = 0
         ##
         result = recursive_solve_3SAT(num_variables, clauses, assignment)
@@ -102,17 +105,17 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
     if (can_do[2]):
         print " " * depth, "b3"
         ##
-        if take_any_clause[0] > 1:
+        if take_any_clause[0] > 0:
             assignment[u] = 0
-        elif take_any_clause[0] < 1:
+        elif take_any_clause[0] < 0:
             assignment[u] = 1
-        if take_any_clause[1] > 1:
+        if take_any_clause[1] > 0:
             assignment[v] = 0
-        elif take_any_clause[1] < 1:
+        elif take_any_clause[1] < 0:
             assignment[v] = 1
-        if take_any_clause[2] > 1:
+        if take_any_clause[2] > 0:
             assignment[w] = 1
-        elif take_any_clause[2] < 1:
+        elif take_any_clause[2] < 0:
             assignment[w] = 0
         ##
         result = recursive_solve_3SAT(num_variables, clauses, assignment)
@@ -301,17 +304,16 @@ wicked = [[-15, -4, 14], [-7, -4, 13], [-2, 18, 11], [-12, -11, -6],
           [1, -4, 3], [6, 8, 1], [12, 14, -8], [12, 5, -13], [-12, 15, 9],
           [-17, -8, 3], [17, -6, 8], [-3, -14, 4]]
 
-# print "solve(w)"
-# x=solve_3SAT(19,wicked)
-# print x
-# print
+print "solve(w)"
+x=solve_3SAT(19,wicked)
+print x
+print
 
-print "fuc None", first_unsat_clause(clauses1,[None]*4)
-print "fuc x2=F", first_unsat_clause(clauses1,[0,None,0,None])
+# print "fuc None", first_unsat_clause(clauses1,[None]*4)
+# print "fuc x2=F", first_unsat_clause(clauses1,[0,None,0,None])
+# print "iss x2=F", clauses1[0], "==", is_satisfied(clauses1[0], [0,None,0,None])
+# print "iss x2=F", clauses1[1], "==", is_satisfied(clauses1[1], [0,None,0,None])
 
-print "iss x2=F", clauses1[0], "==", is_satisfied(clauses1[0], [0,None,0,None])
-print "iss x2=F", clauses1[1], "==", is_satisfied(clauses1[1], [0,None,0,None])
+print "pp", sat_preprocessing(3, clauses1, [0,None,0,None]*4)
 
-print "pp", sat_preprocessing(3, clauses1, [None]*4)
-
-print len(sat_preprocessing(19, wicked, [None]*20)), "vs", len(wicked)
+# print len(sat_preprocessing(19, wicked, [None]*20)), "vs", len(wicked)
