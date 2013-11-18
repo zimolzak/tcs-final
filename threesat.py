@@ -38,7 +38,7 @@ def recursive_solve_3SAT(num_variables, clauses, assignment):
     a=[None]*3 
     for j in range(3):
         a[j] = assignment[abs(take_any_clause[j])]
-        if a[1]!=None and a[2]!=None and a[3]!=None:
+        if a[0]!=None and a[1]!=None and a[2]!=None:
             return None
     # otherwise branch into at most 3 cases
     u = abs(take_any_clause[0])
@@ -198,4 +198,20 @@ def test():
     assert solve_3SAT(3,clauses) == None
     print 'Tests passed'
 
-test()
+# test()
+
+
+######### MY TESTS
+
+clauses1 = [[-2, -3, -1], [3, -2, 1], [-3, 2, 1],
+           [2, -3, -1], [3, -2, 1], [3, -2, 1]]
+
+clauses2 = [[2, 1, 3], [-2, -1, 3], [-2, 3, -1], [-2, -1, 3],
+           [2, 3, 1], [-1, 3, -2], [-3, 2, 1], [1, -3, -2],
+           [-2, -1, 3], [1, -2, -3], [-2, -1, 3], [-1, -2, -3],
+           [3, -2, 1], [2, 1, 3], [-3, -1, 2], [-3, -2, 1],
+           [-1, 3, -2], [1, 2, -3], [-3, -1, 2], [2, -1, 3]]
+
+
+print "solve(clauses1)", solve_3SAT(3,clauses1)
+print "solve(clauses2)", solve_3SAT(3,clauses2)
