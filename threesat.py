@@ -60,7 +60,7 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
     w = abs(take_any_clause[2])
     can_do = what_branch(take_any_clause, assignment)
     if (can_do[0]):
-        # print " " * depth, "b1", take_any_clause, assignment[u], assignment[v], assignment[w], "SET", u
+        print " " * depth, "b1", take_any_clause, assignment[u], assignment[v], assignment[w], "SET", u
         ##
         if take_any_clause[0] > 0:
             assignment[u] = 1 # could simplify as a[u]=int(c[0]>1)
@@ -71,12 +71,12 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
         depth -= 1
         if result != None:
             return result
-        # print " " * depth, "failed all b1"
+        print " " * depth, "failed all b1"
     else:
-        # print " " * depth, "b1 NO", take_any_clause, assignment[u], assignment[v], assignment[w]
+        print " " * depth, "b1 NO", take_any_clause, assignment[u], assignment[v], assignment[w]
         pass
     if (can_do[1]):
-        # print " " * depth, "b2", "SET", u, v
+        print " " * depth, "b2", "SET", u, v
         ##
         if take_any_clause[0] > 0:
             assignment[u] = 0
@@ -92,10 +92,10 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
         if result != None:
             return result
     else:
-        # print " " * depth, "b2 NO"
+        print " " * depth, "b2 NO"
         pass
     if (can_do[2]):
-        # print " " * depth, "b3"
+        print " " * depth, "b3"
         ##
         if take_any_clause[0] > 0:
             assignment[u] = 0
@@ -115,7 +115,7 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
         if result != None:
             return result
     else:
-        # print " " * depth, "b3 NO"
+        print " " * depth, "b3 NO"
         pass
     return None
 
@@ -295,16 +295,41 @@ wicked = [[-15, -4, 14], [-7, -4, 13], [-2, 18, 11], [-12, -11, -6],
           [1, -4, 3], [6, 8, 1], [12, 14, -8], [12, 5, -13], [-12, 15, 9],
           [-17, -8, 3], [17, -6, 8], [-3, -14, 4]]
 
-print "solve(w)"
-x=solve_3SAT(19,wicked)
-print x
-print
+# print "solve(w)"
+# x=solve_3SAT(19,wicked)
+# print x
+# print
 
 # print "fuc None", first_unsat_clause(clauses1,[None]*4)
 # print "fuc x2=F", first_unsat_clause(clauses1,[0,None,0,None])
 # print "iss x2=F", clauses1[0], "==", is_satisfied(clauses1[0], [0,None,0,None])
 # print "iss x2=F", clauses1[1], "==", is_satisfied(clauses1[1], [0,None,0,None])
 
-print "pp", sat_preprocessing(3, clauses1, [0,None,0,None]*4)
+# print "pp", sat_preprocessing(3, clauses1, [0,None,0,None]*4)
 
 # print len(sat_preprocessing(19, wicked, [None]*20)), "vs", len(wicked)
+
+w2=[[15, 4, -3], [-14, -15, 5], [-19, -16, 17], [7, 18, -5], [-14, -16, 12],
+    [-16, -9, 18], [9, 16, 4], [-10, 18, 5], [-11, 4, 2], [-6, -12, -16],
+    [12, 3, 5], [-1, -12, -18], [8, -15, 11], [-1, 5, 13], [-10, -4, -15],
+    [-17, 1, -15], [3, 12, 17], [17, 2, 19], [7, 1, -17], [9, 15, -19],
+    [-8, 2, -16], [7, -2, 17], [-3, 11, -6], [-11, 10, -3], [15, -13, -3],
+    [5, -16, -9], [8, 15, 11], [12, 14, -18], [12, -8, 19], [-15, 4, -8],
+    [8, 9, -1], [-17, -12, -18], [-2, -3, 8], [-3, 4, -1], [15, 2, 19],
+    [-3, -8, -6], [12, 17, 2], [-11, 12, 1], [12, -9, -8], [-7, -14, 2],
+    [10, 14, -11], [-2, 17, 14], [-17, 15, 1], [19, 2, 7], [18, -16, -7],
+    [-7, -1, 13], [1, 19, -7], [18, 2, -3], [15, -3, 1], [10, 14, -12],
+    [15, -3, -2], [1, -18, -2], [18, -3, -13], [2, 16, 6], [10, -5, -15],
+    [-13, -1, -16], [-4, -6, -11], [-15, 4, 1], [-12, -16, 5], [-10, 4, -2],
+    [-10, 1, 6], [-3, 13, -19], [5, -8, -11], [11, 6, -12], [7, 15, -8],
+    [6, 1, -5], [-7, 1, -19], [18, -4, -7], [6, 16, 5], [-8, 19, 2],
+    [13, 4, 11], [-10, -13, -19], [1, 19, 12], [-5, 17, 14], [-5, 1, -7],
+    [-6, 13, -11], [18, -10, -12], [-7, -8, 12], [2, -5, 8], [-14, -15, 16],
+    [13, -6, -7], [15, 14, -1], [14, -2, 3], [18, 15, 5], [3, -8, -19],
+    [-3, -11, -6], [10, 12, -17], [2, -12, 1], [-8, -9, -19], [-11, 17, 5],
+    [-18, -3, 8], [-17, -8, -12]]
+
+print "solve(w2)"
+x=solve_3SAT(19,w2)
+print x
+print
