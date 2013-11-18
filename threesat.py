@@ -69,9 +69,9 @@ def recursive_solve_3SAT(num_variables, clauses, assignment)
 
 def first_unsat_clause(clauses, assignment):
     for i in range(len(clauses)):
-        if is_satisfied(3, clauses, assignment)
-    #FIXME write this function
-    return clauses[0]
+        if not is_satisfied(clauses[i], assignment):
+            return clauses[i]
+    return []
 
 def what_branch(clause, assignment):
     literals = len(clause)
@@ -90,13 +90,9 @@ def what_branch(clause, assignment):
         doable[2]=True
     return doable
 
-
-
-
-
 ###########################
 
-def is_satisfied(single_clause, assignment):  # takes a single clause
+def is_satisfied(clause, assignment):  # takes a single clause
     for j in range(0, len(clause)):
         if assignment[abs(clause[j])] == None:
             return False
