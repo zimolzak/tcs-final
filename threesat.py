@@ -29,7 +29,7 @@ def solve_3SAT(num_variables, clauses):
     assignment = [None] * (num_variables + 1) # index 0 is dummy
     assignment[0] = 0
     clauses_pp = sat_preprocessing(num_variables, clauses, assignment)
-    print clauses_pp
+    # print clauses_pp
     general_assignment = recursive_solve_3SAT(num_variables, clauses_pp, assignment)
     if general_assignment == None:
         return general_assignment
@@ -39,7 +39,7 @@ def solve_3SAT(num_variables, clauses):
                 general_assignment[i] = 0
         return general_assignment
 
-depth = 0
+# depth = 0
 
 from copy import *
 
@@ -47,8 +47,8 @@ def recursive_solve_3SAT(num_variables, clauses, ori_assignment): # doesn't use 
 #     assert num_variables == len(assignment) - 1
     assignment = deepcopy(ori_assignment)
     take_any_clause = first_unsat_clause(clauses, assignment)
-    global depth
-    depth = depth + 1
+    # global depth
+    # depth = depth + 1
     if not take_any_clause:
         return assignment
     # else check if no possible solution
@@ -63,7 +63,7 @@ def recursive_solve_3SAT(num_variables, clauses, ori_assignment): # doesn't use 
     w = abs(take_any_clause[2])
     can_do = what_branch(take_any_clause, assignment)
     if (can_do[0]):
-        print " " * depth, "b1", take_any_clause, assignment[u], assignment[v], assignment[w], "SET", u
+        # print " " * depth, "b1", take_any_clause, assignment[u], assignment[v], assignment[w], "SET", u
         ##
         if take_any_clause[0] > 0:
             assignment[u] = 1 # could simplify as a[u]=int(c[0]>1)
@@ -71,16 +71,16 @@ def recursive_solve_3SAT(num_variables, clauses, ori_assignment): # doesn't use 
             assignment[u] = 0
         ##
         result = recursive_solve_3SAT(num_variables, clauses, assignment)
-        depth -= 1
+        # depth -= 1
         if result != None:
             return result
-        print " " * depth, "failed all b1"
+        # print " " * depth, "failed all b1"
         # FIXME some stuff on reset assignment??
     else:
-        print " " * depth, "b1 NO", take_any_clause, assignment[u], assignment[v], assignment[w]
+        # print " " * depth, "b1 NO", take_any_clause, assignment[u], assignment[v], assignment[w]
         pass
     if (can_do[1]):
-        print " " * depth, "b2", "SET", u, v
+        # print " " * depth, "b2", "SET", u, v
         ##
         if take_any_clause[0] > 0:
             assignment[u] = 0
@@ -92,14 +92,14 @@ def recursive_solve_3SAT(num_variables, clauses, ori_assignment): # doesn't use 
             assignment[v] = 0
         ##
         result = recursive_solve_3SAT(num_variables, clauses, assignment)
-        depth -= 1
+        # depth -= 1
         if result != None:
             return result
     else:
-        print " " * depth, "b2 NO"
+        # print " " * depth, "b2 NO"
         pass
     if (can_do[2]):
-        print " " * depth, "b3", "SET", u, v, w
+        # print " " * depth, "b3", "SET", u, v, w
         ##
         if take_any_clause[0] > 0:
             assignment[u] = 0
@@ -115,11 +115,11 @@ def recursive_solve_3SAT(num_variables, clauses, ori_assignment): # doesn't use 
             assignment[w] = 0
         ##
         result = recursive_solve_3SAT(num_variables, clauses, assignment)
-        depth -= 1
+        # depth -= 1
         if result != None:
             return result
     else:
-        print " " * depth, "b3 NO"
+        # print " " * depth, "b3 NO"
         pass
     return None
 
@@ -308,6 +308,9 @@ w2=[[15, 4, -3], [-14, -15, 5], [-19, -16, 17], [7, 18, -5], [-14, -16, 12],
     [-18, -3, 8], [-17, -8, -12]]
 
 # w2 [0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0]
+
+# w1 [0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0] MASTER
+# w1 [0, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0] FIX_1118
 
 print "solving"
 x=solve_3SAT(19,w2)
