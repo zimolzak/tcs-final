@@ -27,7 +27,7 @@
 
 def solve_3SAT(num_variables, clauses):
     clauses_pp = sat_preprocessing(num_variables, clauses)
-    assignment = [None] * num_variables
+    assignment = [None] * (num_variables + 1) # index 0 is dummy
     return recursive_solve_3SAT(num_variables, clauses_pp, assignment)
 
 def recursive_solve_3SAT(num_variables, clauses, assignment)
