@@ -30,7 +30,7 @@ def solve_3SAT(num_variables, clauses):
     assignment = [None] * (num_variables + 1) # index 0 is dummy
     return recursive_solve_3SAT(num_variables, clauses_pp, assignment)
 
-def recursive_solve_3SAT(num_variables, clauses, assignment)
+def recursive_solve_3SAT(num_variables, clauses, assignment):
     take_any_clause = first_unsat_clause(clauses, assignment)
     if not take_any_clause:
         return assignment
@@ -47,22 +47,20 @@ def recursive_solve_3SAT(num_variables, clauses, assignment)
     can_do = what_branch(take_any_clause, assignment)
     if (can_do[0]):
         assignment[u] = 1
-        result = recursive_vertex_cover(input_graph, assignment)
+        result = recursive_solve_3SAT(3, clauses, assignment)
         if result != None:
             return result
     if (can_do[1]):
         assignment[u] = 0
         assignment[v] = 1
-        assignment_01 = recursive_vertex_cover(input_graph, assignment)
-        result = recursive_vertex_cover(input_graph, assignment)
+        result = recursive_solve_3SAT(3, clauses, assignment)
         if result != None:
             return result
     if (can_do[2]):
         assignment[u] = 0
         assignment[v] = 0
         assignment[w] = 1
-        assignment_01 = recursive_vertex_cover(input_graph, assignment)
-        result = recursive_vertex_cover(input_graph, assignment)
+        result = recursive_solve_3SAT(3, clauses, assignment)
         if result != None:
             return result
     return None
