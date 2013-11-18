@@ -29,7 +29,7 @@ def solve_3SAT(num_variables, clauses):
     assignment = [None] * (num_variables + 1) # index 0 is dummy
     assignment[0] = 0
     clauses_pp = sat_preprocessing(num_variables, clauses, assignment)
-    print clauses_pp
+    # print clauses_pp
     general_assignment = recursive_solve_3SAT(num_variables, clauses_pp, assignment)
     if general_assignment == None:
         return general_assignment
@@ -60,7 +60,7 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
     w = abs(take_any_clause[2])
     can_do = what_branch(take_any_clause, assignment)
     if (can_do[0]):
-        print " " * depth, "b1", take_any_clause, assignment[u], assignment[v], assignment[w], "SET", u
+        # print " " * depth, "b1", take_any_clause, assignment[u], assignment[v], assignment[w], "SET", u
         ##
         if take_any_clause[0] > 0:
             assignment[u] = 1 # could simplify as a[u]=int(c[0]>1)
@@ -71,11 +71,12 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
         depth -= 1
         if result != None:
             return result
-        print " " * depth, "failed all b1"
+        # print " " * depth, "failed all b1"
     else:
-        print " " * depth, "b1 NO", take_any_clause, assignment[u], assignment[v], assignment[w]
+        # print " " * depth, "b1 NO", take_any_clause, assignment[u], assignment[v], assignment[w]
+        pass
     if (can_do[1]):
-        print " " * depth, "b2", "SET", u, v
+        # print " " * depth, "b2", "SET", u, v
         ##
         if take_any_clause[0] > 0:
             assignment[u] = 0
@@ -91,9 +92,10 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
         if result != None:
             return result
     else:
-        print " " * depth, "b2 NO"
+        # print " " * depth, "b2 NO"
+        pass
     if (can_do[2]):
-        print " " * depth, "b3"
+        # print " " * depth, "b3"
         ##
         if take_any_clause[0] > 0:
             assignment[u] = 0
@@ -113,7 +115,8 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
         if result != None:
             return result
     else:
-        print " " * depth, "b3 NO"
+        # print " " * depth, "b3 NO"
+        pass
     return None
 
 def first_unsat_clause(clauses, assignment):
