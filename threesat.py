@@ -29,7 +29,7 @@ def solve_3SAT(num_variables, clauses):
     assignment = [None] * (num_variables + 1) # index 0 is dummy
     assignment[0] = 0
     clauses_pp = sat_preprocessing(num_variables, clauses, assignment)
-    # print clauses_pp
+    print clauses_pp
     general_assignment = recursive_solve_3SAT(num_variables, clauses_pp, assignment)
     if general_assignment == None:
         return general_assignment
@@ -61,6 +61,7 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
     can_do = what_branch(take_any_clause, assignment)
     if (can_do[0]):
         print " " * depth, "b1", take_any_clause, assignment[u], assignment[v], assignment[w], "SET", u
+        ou = assignment[u]
         ##
         if take_any_clause[0] > 0:
             assignment[u] = 1 # could simplify as a[u]=int(c[0]>1)
@@ -68,15 +69,19 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
             assignment[u] = 0
         ##
         result = recursive_solve_3SAT(num_variables, clauses, assignment)
+        assignment[u] = ou
         depth -= 1
         if result != None:
             return result
         print " " * depth, "failed all b1"
+        # FIXME some stuff on reset assignment??
     else:
         print " " * depth, "b1 NO", take_any_clause, assignment[u], assignment[v], assignment[w]
         pass
     if (can_do[1]):
         print " " * depth, "b2", "SET", u, v
+        ou = assignment[u]
+        ov = assignment[v]
         ##
         if take_any_clause[0] > 0:
             assignment[u] = 0
@@ -88,6 +93,8 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
             assignment[v] = 0
         ##
         result = recursive_solve_3SAT(num_variables, clauses, assignment)
+        assignment[u] = ou
+        assignment[v] = ov
         depth -= 1
         if result != None:
             return result
@@ -95,7 +102,10 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
         print " " * depth, "b2 NO"
         pass
     if (can_do[2]):
-        print " " * depth, "b3"
+        print " " * depth, "b3", "SET", u, v, w
+        ou = assignment[u]
+        ov = assignment[v]
+        ow = assignment[w]
         ##
         if take_any_clause[0] > 0:
             assignment[u] = 0
@@ -111,6 +121,9 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
             assignment[w] = 0
         ##
         result = recursive_solve_3SAT(num_variables, clauses, assignment)
+        assignment[u] = ou
+        assignment[v] = ov
+        assignment[w] = ow
         depth -= 1
         if result != None:
             return result
@@ -266,18 +279,6 @@ clauses2 = [[2, 1, 3], [-2, -1, 3], [-2, 3, -1], [-2, -1, 3],
            [3, -2, 1], [2, 1, 3], [-3, -1, 2], [-3, -2, 1],
            [-1, 3, -2], [1, 2, -3], [-3, -1, 2], [2, -1, 3]]
 
-
-print "solve(clauses1)"
-x=solve_3SAT(3,clauses1)
-print x
-print
-
-print "solve(clauses2)"
-x=solve_3SAT(3,clauses2)
-print x
-print
-
-
 wicked = [[-15, -4, 14], [-7, -4, 13], [-2, 18, 11], [-12, -11, -6],
           [7, 17, 4], [4, 6, 13], [-15, -9, -14], [14, -4, 8], [12, -5, -8],
           [6, -5, -2], [8, -9, 10], [-15, -11, -12], [12, 16, 17],
@@ -294,20 +295,6 @@ wicked = [[-15, -4, 14], [-7, -4, 13], [-2, 18, 11], [-12, -11, -6],
           [-10, 7, 3], [-15, -6, -1], [-1, -7, -3], [1, 5, 13], [7, 6, -9],
           [1, -4, 3], [6, 8, 1], [12, 14, -8], [12, 5, -13], [-12, 15, 9],
           [-17, -8, 3], [17, -6, 8], [-3, -14, 4]]
-
-# print "solve(w)"
-# x=solve_3SAT(19,wicked)
-# print x
-# print
-
-# print "fuc None", first_unsat_clause(clauses1,[None]*4)
-# print "fuc x2=F", first_unsat_clause(clauses1,[0,None,0,None])
-# print "iss x2=F", clauses1[0], "==", is_satisfied(clauses1[0], [0,None,0,None])
-# print "iss x2=F", clauses1[1], "==", is_satisfied(clauses1[1], [0,None,0,None])
-
-# print "pp", sat_preprocessing(3, clauses1, [0,None,0,None]*4)
-
-# print len(sat_preprocessing(19, wicked, [None]*20)), "vs", len(wicked)
 
 w2=[[15, 4, -3], [-14, -15, 5], [-19, -16, 17], [7, 18, -5], [-14, -16, 12],
     [-16, -9, 18], [9, 16, 4], [-10, 18, 5], [-11, 4, 2], [-6, -12, -16],
