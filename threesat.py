@@ -28,6 +28,7 @@
 def solve_3SAT(num_variables, clauses):
     clauses_pp = sat_preprocessing(num_variables, clauses)
     assignment = [None] * (num_variables + 1) # index 0 is dummy
+    assignment[0] = 0
     return recursive_solve_3SAT(num_variables, clauses_pp, assignment)
 
 def recursive_solve_3SAT(num_variables, clauses, assignment):
@@ -198,7 +199,7 @@ def test():
     assert solve_3SAT(3,clauses) == None
     print 'Tests passed'
 
-# test()
+test()
 
 
 ######### MY TESTS
