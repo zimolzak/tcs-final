@@ -32,6 +32,9 @@ def solve_3SAT(num_variables, clauses):
     return recursive_solve_3SAT(num_variables, clauses_pp, assignment)
 
 def recursive_solve_3SAT(num_variables, clauses, assignment):
+#     assert num_variables == len(assignment) - 1
+#     print "num", num_variables
+#     print "lena", len(assignment)
     take_any_clause = first_unsat_clause(clauses, assignment)
     if not take_any_clause:
         return assignment
@@ -40,29 +43,37 @@ def recursive_solve_3SAT(num_variables, clauses, assignment):
     for j in range(3):
         a[j] = assignment[abs(take_any_clause[j])]
         if a[0]!=None and a[1]!=None and a[2]!=None:
+            print "  ", take_any_clause, "is unsat and assig=", assignment
             return None
     # otherwise branch into at most 3 cases
     u = abs(take_any_clause[0])
     v = abs(take_any_clause[1])
     w = abs(take_any_clause[2])
     can_do = what_branch(take_any_clause, assignment)
+    print "----", can_do, "a", assignment
     if (can_do[0]):
+        print "b1", take_any_clause
         assignment[u] = 1
         result = recursive_solve_3SAT(3, clauses, assignment)
         if result != None:
+            print "win"
             return result
     if (can_do[1]):
+        print " b2", take_any_clause
         assignment[u] = 0
         assignment[v] = 1
         result = recursive_solve_3SAT(3, clauses, assignment)
         if result != None:
+            print "win"
             return result
     if (can_do[2]):
+        print "  b3", take_any_clause
         assignment[u] = 0
         assignment[v] = 0
         assignment[w] = 1
         result = recursive_solve_3SAT(3, clauses, assignment)
         if result != None:
+            print "win"
             return result
     return None
 
@@ -199,7 +210,7 @@ def test():
     assert solve_3SAT(3,clauses) == None
     print 'Tests passed'
 
-test()
+# test()
 
 
 ######### MY TESTS
@@ -214,5 +225,35 @@ clauses2 = [[2, 1, 3], [-2, -1, 3], [-2, 3, -1], [-2, -1, 3],
            [-1, 3, -2], [1, 2, -3], [-3, -1, 2], [2, -1, 3]]
 
 
-print "solve(clauses1)", solve_3SAT(3,clauses1)
-print "solve(clauses2)", solve_3SAT(3,clauses2)
+print "solve(clauses1)"
+x=solve_3SAT(3,clauses1)
+print x
+print
+
+print "solve(clauses2)"
+x=solve_3SAT(3,clauses2)
+print x
+print
+
+
+wicked = [[-15, -4, 14], [-7, -4, 13], [-2, 18, 11], [-12, -11, -6],
+          [7, 17, 4], [4, 6, 13], [-15, -9, -14], [14, -4, 8], [12, -5, -8],
+          [6, -5, -2], [8, -9, 10], [-15, -11, -12], [12, 16, 17],
+          [17, -9, -12], [-12, -4, 11], [-18, 17, -9], [-10, -12, -11],
+          [-7, 15, 2], [2, 15, 17], [-15, -7, 10], [1, -15, 11],
+          [-13, -1, -6], [-7, -11, 2], [-5, 1, 15], [-14, -13, 18],
+          [14, 12, -1], [18, -16, 9], [5, -11, -13], [-6, 10, -16],
+          [-2, 1, 4], [-4, -11, 8], [-8, 18, 1], [-2, 15, -13],
+          [-15, -12, -10], [-18, -14, -6], [1, -17, 10], [10, -13, 2],
+          [2, 17, -3], [14, 1, -17], [-16, -2, -11], [16, 7, 15],
+          [-10, -6, 16], [4, -5, 10], [8, 10, -12], [1, -9, -14],
+          [18, -9, 11], [16, 7, 12], [-5, -14, -13], [1, 18, 5], [11, 16, 5],
+          [-8, 12, -2], [-6, -2, -13], [18, 16, 7], [-3, 9, -13], [-1, 3, 12],
+          [-10, 7, 3], [-15, -6, -1], [-1, -7, -3], [1, 5, 13], [7, 6, -9],
+          [1, -4, 3], [6, 8, 1], [12, 14, -8], [12, 5, -13], [-12, 15, 9],
+          [-17, -8, 3], [17, -6, 8], [-3, -14, 4]]
+
+print "solve(w)"
+x=solve_3SAT(19,wicked)
+print x
+print
