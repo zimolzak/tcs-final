@@ -27,7 +27,7 @@
 
 def solve_3SAT(num_variables, clauses):
     clauses_pp = sat_preprocessing(num_variables, clauses)
-    # clauses_pp = clauses
+    clauses_pp = clauses
     assignment = [None] * (num_variables + 1) # index 0 is dummy
     assignment[0] = 0
     print clauses_pp
@@ -59,7 +59,10 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
     # print "----", can_do, "a", assignment
     if (can_do[0]):
         print " " * depth, "b1", take_any_clause, assignment[u], assignment[v], assignment[w]
-        assignment[u] = 1
+        if take_any_clause[0] > 1:
+            assignment[u] = 1
+        elif take_any_clause[0] < 1:
+            assignment[u] = 0
         result = recursive_solve_3SAT(num_variables, clauses, assignment)
         depth -= 1
         if result != None:
@@ -70,8 +73,10 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
         print " " * depth, "b1 NO", take_any_clause, assignment[u], assignment[v], assignment[w]
     if (can_do[1]):
         print " " * depth, "b2"
+        ##
         assignment[u] = 0
         assignment[v] = 1
+        ##
         result = recursive_solve_3SAT(num_variables, clauses, assignment)
         depth -= 1
         if result != None:
@@ -81,9 +86,11 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
         print " " * depth, "b2 NO"
     if (can_do[2]):
         print " " * depth, "b3"
+        ##
         assignment[u] = 0
         assignment[v] = 0
         assignment[w] = 1
+        ##
         result = recursive_solve_3SAT(num_variables, clauses, assignment)
         depth -= 1
         if result != None:
@@ -120,14 +127,15 @@ def what_branch(clause, assignment):
 ###########################
 
 def is_satisfied(clause, assignment):  # takes a single clause
-    for j in range(0, len(clause)):
+    for j in range(len(clause)):
         if assignment[abs(clause[j])] == None:
-            return False
-        if clause[j] > 0 and assignment[abs(clause[j])] == True:
+            # return False # This is tricky tricky logic! What is your definition of ANY CLAUSE THAT IS NOT SATISFIED ?
+            continue
+        if clause[j] > 0 and assignment[abs(clause[j])] == True: 
             return True
         if clause[j] < 0 and assignment[abs(clause[j])] == False:
             return True
-    return False
+    return False # falls thru to here if we have only 0 or None, and no 1.
 
 ######## PREPROCESSOR
 
@@ -247,10 +255,10 @@ x=solve_3SAT(3,clauses1)
 print x
 print
 
-print "solve(clauses2)"
-x=solve_3SAT(3,clauses2)
-print x
-print
+# print "solve(clauses2)"
+# x=solve_3SAT(3,clauses2)
+# print x
+# print
 
 
 wicked = [[-15, -4, 14], [-7, -4, 13], [-2, 18, 11], [-12, -11, -6],
@@ -270,7 +278,13 @@ wicked = [[-15, -4, 14], [-7, -4, 13], [-2, 18, 11], [-12, -11, -6],
           [1, -4, 3], [6, 8, 1], [12, 14, -8], [12, 5, -13], [-12, 15, 9],
           [-17, -8, 3], [17, -6, 8], [-3, -14, 4]]
 
-print "solve(w)"
-x=solve_3SAT(19,wicked)
-print x
-print
+# print "solve(w)"
+# x=solve_3SAT(19,wicked)
+# print x
+# print
+
+print "fuc None", first_unsat_clause(clauses1,[None]*4)
+print "fuc x2=F", first_unsat_clause(clauses1,[0,None,0,None])
+
+print "iss x2=F", clauses1[0], "==", is_satisfied(clauses1[0], [0,None,0,None])
+print "iss x2=F", clauses1[1], "==", is_satisfied(clauses1[1], [0,None,0,None])
