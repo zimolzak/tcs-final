@@ -39,13 +39,13 @@ def solve_3SAT(num_variables, clauses):
                 general_assignment[i] = 0
         return general_assignment
 
-depth = 0
+# depth = 0
 
 def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_variables
 #     assert num_variables == len(assignment) - 1
     take_any_clause = first_unsat_clause(clauses, assignment)
-    global depth
-    depth = depth + 1
+    # global depth
+    # depth = depth + 1
     if not take_any_clause:
         return assignment
     # else check if no possible solution
@@ -68,7 +68,7 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
             assignment[u] = 0
         ##
         result = recursive_solve_3SAT(num_variables, clauses, assignment)
-        depth -= 1
+        # depth -= 1
         if result != None:
             return result
         # print " " * depth, "failed all b1"
@@ -88,7 +88,7 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
             assignment[v] = 0
         ##
         result = recursive_solve_3SAT(num_variables, clauses, assignment)
-        depth -= 1
+        # depth -= 1
         if result != None:
             return result
     else:
@@ -111,7 +111,7 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
             assignment[w] = 0
         ##
         result = recursive_solve_3SAT(num_variables, clauses, assignment)
-        depth -= 1
+        # depth -= 1
         if result != None:
             return result
     else:
