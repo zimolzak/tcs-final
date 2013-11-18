@@ -26,12 +26,19 @@
 # You may write any additional functions you require to solve this problem.
 
 def solve_3SAT(num_variables, clauses):
-    clauses_pp = sat_preprocessing(num_variables, clauses)
-    clauses_pp = clauses
     assignment = [None] * (num_variables + 1) # index 0 is dummy
     assignment[0] = 0
+    clauses_pp = sat_preprocessing(num_variables, clauses, assignment)
+    # clauses_pp = clauses
     print clauses_pp
-    return recursive_solve_3SAT(num_variables, clauses_pp, assignment)
+    general_assignment = recursive_solve_3SAT(num_variables, clauses_pp, assignment)
+    if general_assignment == None:
+        return general_assignment
+    else:
+        for i in range(len(general_assignment)):
+            if general_assignment[i] == None:
+                general_assignment[i] = 0
+        return general_assignment
 
 depth = 0
 
@@ -59,10 +66,12 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
     # print "----", can_do, "a", assignment
     if (can_do[0]):
         print " " * depth, "b1", take_any_clause, assignment[u], assignment[v], assignment[w]
+        ##
         if take_any_clause[0] > 1:
-            assignment[u] = 1
+            assignment[u] = 1 # could simplify as a[u]=int(c[0]>1)
         elif take_any_clause[0] < 1:
             assignment[u] = 0
+        ##
         result = recursive_solve_3SAT(num_variables, clauses, assignment)
         depth -= 1
         if result != None:
@@ -74,8 +83,14 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
     if (can_do[1]):
         print " " * depth, "b2"
         ##
-        assignment[u] = 0
-        assignment[v] = 1
+        if take_any_clause[0] > 1:
+            assignment[u] = 0
+        elif take_any_clause[0] < 1:
+            assignment[u] = 1
+        if take_any_clause[1] > 1:
+            assignment[v] = 1
+        elif take_any_clause[1] < 1:
+            assignment[v] = 0
         ##
         result = recursive_solve_3SAT(num_variables, clauses, assignment)
         depth -= 1
@@ -87,9 +102,18 @@ def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_
     if (can_do[2]):
         print " " * depth, "b3"
         ##
-        assignment[u] = 0
-        assignment[v] = 0
-        assignment[w] = 1
+        if take_any_clause[0] > 1:
+            assignment[u] = 0
+        elif take_any_clause[0] < 1:
+            assignment[u] = 1
+        if take_any_clause[1] > 1:
+            assignment[v] = 0
+        elif take_any_clause[1] < 1:
+            assignment[v] = 1
+        if take_any_clause[2] > 1:
+            assignment[w] = 1
+        elif take_any_clause[2] < 1:
+            assignment[w] = 0
         ##
         result = recursive_solve_3SAT(num_variables, clauses, assignment)
         depth -= 1
@@ -141,13 +165,13 @@ def is_satisfied(clause, assignment):  # takes a single clause
 
 from copy import *
 
-def rule1(assignment, clauses):
+def rule1(assignment, clauses): # If a clause has only 1 var, var must be true.
     for row in clauses:
-        if len(row)==1: #rule1
+        if len(row)==1: 
             assignment[abs(row[0])] = (row[0] > 0)
     return assignment
 
-def rule2(assignment, clauses):
+def rule2(assignment, clauses): # If a var occurs only once, easy to set to true.
     occurrences = [0] * (len(assignment)) # 0 means 0. 1 or -1 means 1. 2 means 2+.
     for row in clauses:# count up occurrences in prep for rule 2
         for term in row: 
@@ -162,7 +186,7 @@ def rule2(assignment, clauses):
             assignment[var_num] = (occurrences[var_num] > 0)
     return assignment
 
-def rule3(assignment, clauses):
+def rule3(assignment, clauses): # Remove any satisfied clauses.
     for i in range(len(clauses)):
         for j in range(len(clauses[i])):
             if clauses[i] == "sat":
@@ -175,7 +199,7 @@ def rule3(assignment, clauses):
         clauses.remove("sat")
     return clauses
 
-def rule4(assignment, clauses):
+def rule4(assignment, clauses): # Remove any FALSE variables.
     for var_num in range(1,len(assignment)):
         if assignment[var_num] == None:
             continue
@@ -190,8 +214,7 @@ def rule4(assignment, clauses):
                 return "FAIL"
     return clauses
 
-def sat_preprocessing(num_variables, clauses):
-    assignment = [None] * (num_variables + 1) # assignment[0] is dummy
+def sat_preprocessing(num_variables, clauses, assignment):
     # print "****"
     oa=0
     oc=0
@@ -255,10 +278,10 @@ x=solve_3SAT(3,clauses1)
 print x
 print
 
-# print "solve(clauses2)"
-# x=solve_3SAT(3,clauses2)
-# print x
-# print
+print "solve(clauses2)"
+x=solve_3SAT(3,clauses2)
+print x
+print
 
 
 wicked = [[-15, -4, 14], [-7, -4, 13], [-2, 18, 11], [-12, -11, -6],
@@ -288,3 +311,7 @@ print "fuc x2=F", first_unsat_clause(clauses1,[0,None,0,None])
 
 print "iss x2=F", clauses1[0], "==", is_satisfied(clauses1[0], [0,None,0,None])
 print "iss x2=F", clauses1[1], "==", is_satisfied(clauses1[1], [0,None,0,None])
+
+print "pp", sat_preprocessing(3, clauses1, [None]*4)
+
+print len(sat_preprocessing(19, wicked, [None]*20)), "vs", len(wicked)
