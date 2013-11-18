@@ -41,40 +41,54 @@ def recursive_solve_3SAT(num_variables, clauses, assignment)
         if a[1]!=None and a[2]!=None and a[3]!=None:
             return None
     # otherwise branch into at most 3 cases
-    u = None
-    v = None
-    w = None
-
-    # some stuff
-
-    # FIXME - if it is appropriate to try
-    assignment[u] = 1
-    assignment_1 = recursive_vertex_cover(input_graph, assignment)
-    if assignment_1 == None: # FIXME and if it is appropriate to try
+    u = abs(take_any_clause[0])
+    v = abs(take_any_clause[1])
+    w = abs(take_any_clause[2])
+    can_do = what_branch(take_any_clause, assignment)
+    if (can_do[0]):
+        assignment[u] = 1
+        result = recursive_vertex_cover(input_graph, assignment)
+        if result != None:
+            return result
+    if (can_do[1]):
         assignment[u] = 0
         assignment[v] = 1
         assignment_01 = recursive_vertex_cover(input_graph, assignment)
-    else:
-        assignment[u] = None
-        return assignment_1
-    if assignment_01 == None: # FIXME and if it is appropriate to try
+        result = recursive_vertex_cover(input_graph, assignment)
+        if result != None:
+            return result
+    if (can_do[2]):
         assignment[u] = 0
         assignment[v] = 0
         assignment[w] = 1
-        assignment_001 = recursive_vertex_cover(input_graph, assignment)
-    else:
-        assignment[u] = None
-        assignment[v] = None
-        return assignment_01
-    assignment[u] = None
-    assignment[v] = None
-    assignment[w] = None
-    return assignment_001
+        assignment_01 = recursive_vertex_cover(input_graph, assignment)
+        result = recursive_vertex_cover(input_graph, assignment)
+        if result != None:
+            return result
+    return None
 
-def first_unsat_clauses(clauses, assignment):
+def first_unsat_clause(clauses, assignment):
+    for i in range(len(clauses)):
+        if is_satisfied(3, clauses, assignment)
     #FIXME write this function
-    return range(len(clauses))
+    return clauses[0]
 
+def what_branch(clause, assignment):
+    literals = len(clause)
+    assert literals == 3
+    doable=[False]*literals
+    a=[None]*literals 
+    for j in range(literals):
+        a[j] = assignment[abs(clause[j])]
+        if clause[j]<0 and a[j] != None:
+            a[j] = not a[j]
+    if a[0]==True or a[0]==None:
+        doable[0]=True
+    if (a[0]==False or a[0]==None) and (a[1]==True or a[1]==None):
+        doable[1]=True
+    if (a[0]==False or a[0]==None) and (a[1]==False or a[1]==None) and (a[2]==True or a[2]==None):
+        doable[2]=True
+    return doable
 
 
 
@@ -82,24 +96,15 @@ def first_unsat_clauses(clauses, assignment):
 
 ###########################
 
-def is_satisfied(num_variables, clauses, assignment):
-    assert num_variables + 1 == len(assignment)
-    # print
-    # print clauses, assignment[1:len(assignment)]
-    total_truth = True
-    for i in range(0, len(clauses)):
-        clause_truth = False
-        for j in range(0, len(clauses[i])):
-            if clauses[i][j] > 0:
-                # print " or x", clauses[i][j], "=", assignment[clauses[i][j]]
-                clause_truth = clause_truth or assignment[clauses[i][j]]
-            else:
-                # print " or not x", -1 * clauses[i][j], "=", assignment[-1 * clauses[i][j]]
-                clause_truth = clause_truth or not assignment[-1 * clauses[i][j]]
-        # print " ) and ( "
-        total_truth = total_truth and clause_truth
-    # print total_truth
-    return total_truth
+def is_satisfied(single_clause, assignment):  # takes a single clause
+    for j in range(0, len(clause)):
+        if assignment[abs(clause[j])] == None:
+            return False
+        if clause[j] > 0 and assignment[abs(clause[j])] == True:
+            return True
+        if clause[j] < 0 and assignment[abs(clause[j])] == False:
+            return True
+    return False
 
 ######## PREPROCESSOR
 
