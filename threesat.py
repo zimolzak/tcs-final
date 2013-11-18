@@ -27,15 +27,21 @@
 
 def solve_3SAT(num_variables, clauses):
     clauses_pp = sat_preprocessing(num_variables, clauses)
+    # clauses_pp = clauses
     assignment = [None] * (num_variables + 1) # index 0 is dummy
     assignment[0] = 0
+    print clauses_pp
     return recursive_solve_3SAT(num_variables, clauses_pp, assignment)
 
-def recursive_solve_3SAT(num_variables, clauses, assignment):
+depth = 0
+
+def recursive_solve_3SAT(num_variables, clauses, assignment): # doesn't use num_variables
 #     assert num_variables == len(assignment) - 1
 #     print "num", num_variables
 #     print "lena", len(assignment)
     take_any_clause = first_unsat_clause(clauses, assignment)
+    global depth
+    depth = depth + 1
     if not take_any_clause:
         return assignment
     # else check if no possible solution
@@ -43,38 +49,49 @@ def recursive_solve_3SAT(num_variables, clauses, assignment):
     for j in range(3):
         a[j] = assignment[abs(take_any_clause[j])]
         if a[0]!=None and a[1]!=None and a[2]!=None:
-            print "  ", take_any_clause, "is unsat and assig=", assignment
+            # print "  ", take_any_clause, "is unsat and assig=", assignment
             return None
     # otherwise branch into at most 3 cases
     u = abs(take_any_clause[0])
     v = abs(take_any_clause[1])
     w = abs(take_any_clause[2])
     can_do = what_branch(take_any_clause, assignment)
-    print "----", can_do, "a", assignment
+    # print "----", can_do, "a", assignment
     if (can_do[0]):
-        print "b1", take_any_clause
+        print " " * depth, "b1", take_any_clause, assignment[u], assignment[v], assignment[w]
         assignment[u] = 1
-        result = recursive_solve_3SAT(3, clauses, assignment)
+        result = recursive_solve_3SAT(num_variables, clauses, assignment)
+        depth -= 1
         if result != None:
-            print "win"
+            # print "win"
             return result
+        print " " * depth, "failed all b1"
+    else:
+        print " " * depth, "b1 NO", take_any_clause, assignment[u], assignment[v], assignment[w]
     if (can_do[1]):
-        print " b2", take_any_clause
+        print " " * depth, "b2"
         assignment[u] = 0
         assignment[v] = 1
-        result = recursive_solve_3SAT(3, clauses, assignment)
+        result = recursive_solve_3SAT(num_variables, clauses, assignment)
+        depth -= 1
         if result != None:
-            print "win"
+            # print "win"
             return result
+    else:
+        print " " * depth, "b2 NO"
     if (can_do[2]):
-        print "  b3", take_any_clause
+        print " " * depth, "b3"
         assignment[u] = 0
         assignment[v] = 0
         assignment[w] = 1
-        result = recursive_solve_3SAT(3, clauses, assignment)
+        result = recursive_solve_3SAT(num_variables, clauses, assignment)
+        depth -= 1
         if result != None:
-            print "win"
+            # print "win"
             return result
+    else:
+        print " " * depth, "b3 NO"
+    # print "FAIL"
     return None
 
 def first_unsat_clause(clauses, assignment):
@@ -183,7 +200,7 @@ def sat_preprocessing(num_variables, clauses):
         # print "pr3: a=", assignment[1:len(assignment)], "c=", clauses
         clauses=rule4(assignment, clauses)
         if clauses=="FAIL":
-            return [[1,-1]] # FIXME. Stupid kludge to pass class. Technically it should be [[1],[-1]]
+            return [[1],[-1]] # FIXME. Stupid kludge to pass class. Technically it should be [[1],[-1]]
         # print "pr4: a=", assignment[1:len(assignment)], "c=", clauses
     return clauses
 
